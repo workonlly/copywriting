@@ -15,14 +15,14 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     </section>
             <section className=' rounded-sm h-full w-full  p-2 flex flex-col'> 
              <div className="p-2 ">
-                  <Image src="/copy-logo.png" alt="logo" width={120} height={50} className="w-auto h-auto object-contain  bg-gradient-to-r from-purple-400 to-purple-600 " />
+                  <Image src="/logo-1.svg" alt="logo" width={180} height={80} className="p-1 object-contain  bg-gradient-to-r from-purple-400 to-purple-600 " />
                </div>
              {children}
             </section>
                 </div>
       </div>
       <div className='absolute left-1/2 bottom-5  -translate-x-1/2 flex flex-col justify-end items-center  w-[60%] h-[21%] rounded-xl z-0 shadow-xl pb-2'>
-        <Image src="/copy-logo.png" alt="logo" width={120} height={50} className="w-auto h-auto object-contain " />
+        <Image src="/logo-2.svg" alt="logo" width={180} height={50} className=" object-contain " />
       </div>
     </div>
 	);

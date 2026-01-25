@@ -24,7 +24,7 @@ async function getJob(id: string): Promise<Job> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:4000";
   
   // Requires the backend route: app.get("/post/service/:id", ...)
-  const res = await fetch(`${API_BASE}/get/data/${id}`, {
+  const res = await fetch(`${API_BASE}/calls/${id}`, {
     cache: 'no-store', // Ensures fresh data on every load
   });
 

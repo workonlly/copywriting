@@ -44,7 +44,7 @@ function Navbar() {
         {/* Left: Logo & Explore */}
         <div className='flex flex-row items-center gap-4'>
           <Link href="/">
-            <Image src="/copy-logo.png" alt="logo" width={110} height={40} className="w-auto h-auto object-contain" />
+            <Image src="/logo-1.svg" alt="logo" width={180} height={80} className="p-1 object-contain  bg-gradient-to-r from-purple-400 to-purple-600 " />
           </Link>
           <div className="hidden lg:flex flex-row gap-2 items-center px-3 py-1.5 rounded-full bg-gray-50 text-gray-500 hover:text-violet-600 font-medium cursor-pointer transition-all border border-transparent hover:border-violet-100">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
