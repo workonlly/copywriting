@@ -2,19 +2,22 @@
 'use client';
 import React from 'react'
 import JobCard from '../card'
+import { getUser} from '../../lib/data'
 import { useEffect,useState } from 'react'
 const API_BASE: any = process.env.NEXT_PUBLIC_API_BASE_URL;
 function page() {
  const [posts,setposts]=useState<any>(null);
  const [loading,setloading]=useState(true);
  useEffect(()=>{
-  const ftcha=async ()=>{
-      const data = await fetch(`${API_BASE}/calls/notes`);
+    const your=async()=>{
+      const id1=await getUser();
+      const id=id1.id;
+      const data = await fetch(`${API_BASE}/calls/${id}`);
       const json = await data.json();
-      setposts(json);
+       setposts(json);
       setloading(false);
     }
-    ftcha();
+    your();
   },[]);
   return (
     <div className="p-2">

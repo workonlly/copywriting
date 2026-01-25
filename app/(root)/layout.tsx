@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "../navbar";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,32 +25,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div><Navbar></Navbar></div>
-        <nav className="mx-5 my-1">
-          <ul className="flex flex-row text-sm font-semibold gap-3">
-            <li>
-              <a href="/" className="block px-4 py-2 rounded hover:bg-orange-500 hover:text-white transition-colors">Assignment</a>
-            </li>
-            <li>
-              <a href="rental" className="block px-4 py-2 rounded hover:bg-orange-500 hover:text-white transition-colors">Rental</a>
-            </li>
-            <li>
-              <a href="notes" className="block px-4 py-2 rounded hover:bg-orange-500 hover:text-white transition-colors">Notes</a>
-            </li>
-            <li>
-              <a href="canteen" className="block px-4 py-2 rounded hover:bg-orange-500 hover:text-white transition-colors">Canteen</a>
-            </li>
-          </ul>
-        </nav>
-        <div className="p-2">
-        <div className="w-full bg-gradient-to-r from-orange-400 to-orange-600 h-1 "></div>
-        </div>
+    <div className="flex flex-col h-screen">
+      <div><Navbar /></div>
+      <nav className="mx-5 my-1">
+        <ul className="flex flex-row text-sm font-semibold gap-3">
+          <li>
+            <Link href="/" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Assignment</Link>
+          </li>
+          <li>
+            <Link href="/rental" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Rental</Link>
+          </li>
+          <li>
+            <Link href="/notes" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Notes</Link>
+          </li>
+          <li>
+            <Link href="/canteen" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Canteen</Link>
+          </li>
+          <li>
+            <Link href="/jobs" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">JOBS</Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="p-2">
+        <div className="w-full bg-linear-to-r from-violet-400 to-violet-600 h-1 "></div>
+      </div>
+      <main className="flex-1 min-h-0">
         {children}
-      </body>
-    </html>
+      </main>
+    </div>
   );
 }
