@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Link from 'next/link';
 
 interface JobCardProps {
   id:number;
@@ -13,7 +14,7 @@ interface JobCardProps {
   location:string;
 }
 
-const JobCard: React.FC<JobCardProps> = ({ 
+const JobCardi: React.FC<JobCardProps> = ({ 
   id,
   headline, 
   description, 
@@ -77,14 +78,14 @@ const JobCard: React.FC<JobCardProps> = ({
         </div>
 
         {/* 3. Bid Button */}
-        <a
-        href={`${id}/work`}
+        <Link
+        href={`/profile/${id}/postupdates`}
         className="w-full text-center mt-auto bg-black text-white py-3 font-black uppercase text-sm tracking-widest hover:bg-violet-500 hover:text-white transition-colors">
           View Details
-        </a>
+        </Link>
       </div>
     </div>
   );
 };
 
-export default JobCard;
+export default JobCardi;

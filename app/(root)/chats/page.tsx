@@ -1,5 +1,5 @@
 import React from 'react'
-import ChatInterface from './contacts'
+import ChatInterface from './[id]/contacts'
 
 function page() {
   return (

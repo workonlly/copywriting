@@ -239,18 +239,7 @@ const JobPostForm = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Deadline */}
-            <div>
-              <label className="block text-xs font-black uppercase mb-1 text-gray-500">Deadline</label>
-              <input 
-                type="datetime-local" 
-                value={deadline}
-                onChange={(e) => setDeadline(e.target.value)}
-                className="w-full border-2 border-black p-3 rounded-sm"
-              />
-            </div>
-
-            {/* Cost */}
-            <div>
+             <div>
               <label className="block text-xs font-black uppercase mb-1 text-gray-500">Cost (₹)</label>
               <input 
                 type="number" 
@@ -260,6 +249,20 @@ const JobPostForm = () => {
                 placeholder="Price"
               />
             </div>
+           
+
+            {/* Cost - Hide for Canteen */}
+            {type !== "Canteen" && (
+             <div>
+              <label className="block text-xs font-black uppercase mb-1 text-gray-500">Deadline</label>
+              <input 
+                type="datetime-local" 
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+                className="w-full border-2 border-black p-3 rounded-sm font-bold"
+              />
+            </div>
+            )}
           </div>
 
           {/* Links */}

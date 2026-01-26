@@ -41,9 +41,6 @@ export default function RootLayout({
           <li>
             <Link href="/canteen" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Canteen</Link>
           </li>
-          <li>
-            <Link href="/jobs" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">JOBS</Link>
-          </li>
         </ul>
       </nav>
       <div className="p-2">

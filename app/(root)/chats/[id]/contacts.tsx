@@ -32,30 +32,6 @@ const ChatInterface: React.FC = () => {
   return (
     <div className="flex h-full bg-white text-black font-sans border-t border-gray-200">
       
-      {/* 1. Sidebar (Chat List) */}
-      <aside className="w-1/4 border-r border-gray-200 flex flex-col hidden md:flex">
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="font-black uppercase tracking-tight text-lg">Contacts</h2>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          {/* Active Chat Item */}
-          <div className="p-4 flex items-center gap-3 bg-violet-50 border-l-4 border-violet-500 cursor-pointer">
-            <div className="w-12 h-12 bg-black rounded-sm flex-shrink-0" />
-            <div className="overflow-hidden">
-              <h3 className="font-bold text-sm truncate">Sujal (Client)</h3>
-              <p className="text-xs text-gray-500 truncate italic">Active now</p>
-            </div>
-          </div>
-          {/* Other Chat Item */}
-          <div className="p-4 flex items-center gap-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors">
-            <div className="w-12 h-12 bg-gray-200 rounded-sm flex-shrink-0" />
-            <div className="overflow-hidden">
-              <h3 className="font-bold text-sm truncate">Rohit Sharma</h3>
-              <p className="text-xs text-gray-500 truncate">I'll send the files...</p>
-            </div>
-          </div>
-        </div>
-      </aside>
 
       {/* 2. Main Chat Window */}
       <main className="flex-1 flex flex-col">

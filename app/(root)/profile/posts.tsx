@@ -1,32 +1,31 @@
+import React, { use } from 'react'
+import { useState,useEffect } from 'react'
+import { getUser } from '@/app/lib/data';
+import JobCardi from './card';
 
-'use client';
-import React from 'react'
-import JobCard from '../card'
-import { getUser} from '../../lib/data'
-import { useEffect,useState } from 'react'
-const API_BASE: any = process.env.NEXT_PUBLIC_API_BASE_URL;
-function page() {
- const [posts,setposts]=useState<any>(null);
- const [loading,setloading]=useState(true);
- useEffect(()=>{
-    const your=async()=>{
-      const id1=await getUser();
-      const id=id1.id;
-      const data = await fetch(`${API_BASE}/calls/${id}`);
-      const json = await data.json();
-       setposts(json);
-      setloading(false);
-    }
-    your();
-  },[]);
+function Posts() {
+    const API_BASE: any = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const[posts,setposts]=useState<any>(null);
+    const[loading,setloading]=useState(true);
+    useEffect(()=>{
+      const jobs=async()=>{
+         const id1=await getUser();
+            const id=id1?.id;
+        const data =await fetch(`${API_BASE}/calls/${id}`);
+        const json = await data.json();
+        setposts(json);
+        setloading(false);
+      };
+      jobs();
+    });
   return (
-    <div className="p-2">
+        <div className="p-2">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {loading ? (
           <p className="text-gray-500 font-medium">Loading posts...</p>
         ) : (
           posts.map((post: any) => (
-            <JobCard 
+            <JobCardi 
               key={post.id}
               id={post.id}
               image_url={post.image_url}
@@ -36,7 +35,7 @@ function page() {
               deadline={post.deadline}
               type={post.type}
               progress={post.progress}
-               location={post.location}
+              location={post.location}
             />
           ))
         )}
@@ -49,4 +48,4 @@ function page() {
   )
 }
 
-export default page
+export default Posts
