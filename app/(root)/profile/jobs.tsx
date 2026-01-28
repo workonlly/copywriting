@@ -85,7 +85,7 @@ function Jobs() {
                   <button 
                     onClick={(e) => {
                       e.preventDefault();
-                      window.location.href = `/profile/${post.id}/postupdates`;
+                      window.location.href = `/chats`;
                     }}
                     className="w-full mt-auto bg-black text-white py-3 font-black uppercase text-sm tracking-widest hover:bg-violet-500 hover:text-white transition-colors rounded-sm"
                   >

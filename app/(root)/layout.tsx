@@ -27,19 +27,19 @@ export default function RootLayout({
   return (
     <div className="flex flex-col h-screen">
       <div><Navbar /></div>
-      <nav className="mx-5 my-1">
-        <ul className="flex flex-row text-sm font-semibold gap-3">
+      <nav className="mx-2 md:mx-5 my-1">
+        <ul className="flex flex-row text-xs md:text-sm font-semibold gap-1 md:gap-3 flex-wrap">
           <li>
-            <Link href="/" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Assignment</Link>
+            <Link href="/" className="block px-2 md:px-4 py-1 md:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Assignment</Link>
           </li>
           <li>
-            <Link href="/rental" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Rental</Link>
+            <Link href="/rental" className="block px-2 md:px-4 py-1 md:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Rental</Link>
           </li>
           <li>
-            <Link href="/notes" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Notes</Link>
+            <Link href="/notes" className="block px-2 md:px-4 py-1 md:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Notes</Link>
           </li>
           <li>
-            <Link href="/canteen" className="block px-4 py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Canteen</Link>
+            <Link href="/canteen" className="block px-2 md:px-4 py-1 md:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors">Canteen</Link>
           </li>
         </ul>
       </nav>

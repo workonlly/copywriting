@@ -134,6 +134,13 @@ function Navbar() {
             <Link href="/postpage" className="p-3 bg-violet-600 text-white rounded-xl text-center font-bold text-sm shadow-md" onClick={() => setIsOpen(false)}>
               Post a New Job
             </Link>
+            <div className="flex flex-row gap-2 items-center px-3 py-1.5 rounded-full bg-gray-50 text-gray-500 hover:text-violet-600 font-medium cursor-pointer transition-all border border-transparent hover:border-violet-100">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+            <span className='text-xs'>Explore</span>
+          </div>
             <Link href="/chats" className="p-3 text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-3 font-medium" onClick={() => setIsOpen(false)}>
                Messages
             </Link>

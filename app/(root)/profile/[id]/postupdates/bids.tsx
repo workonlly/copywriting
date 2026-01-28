@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import User from './user';
 
 interface BidType {
@@ -12,6 +12,7 @@ interface BidType {
 }
 
 function Bid({prog}: {prog?: string}) {
+  const router = useRouter();
   const params = useParams();
   const id = params.id as string;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
@@ -34,9 +35,33 @@ function Bid({prog}: {prog?: string}) {
       if (!res.ok) throw new Error("Failed to accept bid");
       
       alert("Bid accepted successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error accepting bid:", error);
       alert("Failed to accept bid");
+    }
+  };
+
+  const completefunction = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE}/bids/complete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Server error response:", errorText);
+        throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+      }
+      router.push("/profile");
+      alert("Job marked as complete!");
+    } catch (error) {
+      console.error("Error marking job as complete:", error);
     }
   };
 
@@ -90,7 +115,7 @@ function Bid({prog}: {prog?: string}) {
                 <span className="text-[10px] font-bold uppercase text-gray-400">Offer</span>
                 <span className="text-xl font-black text-violet-600">₹{bid.amount}</span>
               </div>
-              {prog == "initiated "? 
+              {prog?.trim() === "initiated"? 
                <button
                 onClick={() => handleAcceptBid(bid.bidder_id)}
                 className="w-full bg-violet-500 text-white text-[10px] font-black uppercase px-2 py-2 rounded hover:bg-black hover:text-white transition-colors"
@@ -101,8 +126,8 @@ function Bid({prog}: {prog?: string}) {
               <div className="space-y-2">
                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest italic">Job in Progress</p>
                 <button
-                  disabled
-                  className="w-full bg-violet-500 text-white hover:bg-black hover:text-white text-[10px] font-black uppercase px-2 py-2 rounded cursor-not-allowed "
+                  onClick={completefunction}
+                  className="w-full bg-violet-500 text-white hover:bg-black hover:text-white text-[10px] font-black uppercase px-2 py-2 rounded  "
                 >
                   Completed
                 </button>

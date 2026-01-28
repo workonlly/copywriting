@@ -50,7 +50,7 @@ export default function UpdatePostPage() {
           deadline: formattedDate,
           cost: data.cost.toString(),
           links: data.links || [''],
-          progress: data.progress || ""
+          progress: data.progress ,
         });
         setExistingImages(data.image_url || []);
       } catch (err: any) {
@@ -203,7 +203,8 @@ export default function UpdatePostPage() {
         {/* Header */}
         <div className="bg-black text-white p-6 border-b-4 border-violet-500 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-black uppercase tracking-tight italic">Update Post</h1>
+            <h1 className="text-2xl font-black uppercase tracking-tight italic">Update Post : {formData.progress}</h1>
+
           </div>
           <button 
             type="button"
@@ -337,7 +338,7 @@ export default function UpdatePostPage() {
         </form>
       </div>
       <div>
-        <Bids prog={formData.progress} ></Bids>
+        <Bids prog={formData?.progress} ></Bids>
       </div>
     </div>
   );
