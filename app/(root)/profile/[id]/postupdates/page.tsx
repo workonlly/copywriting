@@ -2,6 +2,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Bids from './bids';
+import Bidrun from './bidrun';
+import Bid from './bids';
 
 export default function UpdatePostPage() {
   const router = useRouter();
@@ -21,7 +23,8 @@ export default function UpdatePostPage() {
     deadline: "",
     cost: "",
     links: [""],
-    progress: ""
+    progress: "",
+    assigned_user_id: null,
   });
 
   // Image Management State
@@ -51,6 +54,7 @@ export default function UpdatePostPage() {
           cost: data.cost.toString(),
           links: data.links || [''],
           progress: data.progress ,
+          assigned_user_id: data.assigned_user_id ,
         });
         setExistingImages(data.image_url || []);
       } catch (err: any) {
@@ -338,7 +342,15 @@ export default function UpdatePostPage() {
         </form>
       </div>
       <div>
+        {formData?.assigned_user_id == null?
         <Bids prog={formData?.progress} ></Bids>
+        :
+        (
+        <>
+         <Bidrun/>
+        </>)
+        }
+        
       </div>
     </div>
   );

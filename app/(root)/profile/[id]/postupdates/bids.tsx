@@ -100,7 +100,7 @@ function Bid({prog}: {prog?: string}) {
             key={bid.id} 
             className="aspect-square flex flex-col justify-between bg-white border-4 border-black p-3 shadow-[6px_6px_0px_0px_rgba(124,58,237,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-sm"
           >
-            <User  id={bid.bidder_id}/>
+            <User id={bid.bidder_id}></User>
 
             {/* Middle: Message */}
             <div className="flex-1 py-3 overflow-hidden">

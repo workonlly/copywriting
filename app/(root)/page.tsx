@@ -19,7 +19,7 @@ function page() {
   },[]);
   return (
     <div className="p-2">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {loading ? (
           <p className="text-gray-500 font-medium">Loading posts...</p>
         ) : (

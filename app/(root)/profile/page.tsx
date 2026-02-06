@@ -73,17 +73,10 @@ const ProfilePage: React.FC = () => {
               <p className="text-gray-500 text-sm font-medium">{email}</p>
               {bio && <p className="mt-3 text-gray-600 max-w-lg">{bio}</p>}
             </div>
-          </div>
-        </div>
-        {/* 2. Quick Stats Section */}
-        <div className="bg-white border-2 border-gray-200 rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Stats</h3>
-          <div className="grid grid-cols-3 gap-4">
-            <StatCard value={active_requests} label="Active Requests" />
             <StatCard value={token} label="Credits" />
-            <StatCard value={completed_requests} label="Completed" />
           </div>
         </div>
+     
     
         <div className="bg-white border-2 border-gray-200 rounded-lg shadow-sm p-6 overflow-auto">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Your Assigned Jobs</h3>
@@ -107,9 +100,9 @@ const ProfilePage: React.FC = () => {
 
 // Reusable Stat Component
 const StatCard = ({ value, label }: { value: any, label: string }) => (
-  <div className="p-4 bg-violet-50 border border-violet-200 rounded-lg text-center">
+  <div className="p-4 bg-violet-50 border border-violet-200 rounded-lg text-center flex flex-row items-center gap-1">
+    <p className="text-xs uppercase font-semibold text-gray-500 mt-1">{label}:</p>
     <p className="text-3xl font-bold text-violet-600">{value || "0"}</p>
-    <p className="text-xs uppercase font-semibold text-gray-500 mt-1">{label}</p>
   </div>
 );
 
