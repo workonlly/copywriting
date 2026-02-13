@@ -274,7 +274,7 @@ export default function UpdatePostPage() {
                 <option value="Assignment">Assignment</option>
                 <option value="Project">Rental</option>
                 <option value="Notes">Notes</option>
-                <option value="Canteen">Canteen</option>
+                <option value="Canteen">Grocery</option>
               </select>
             </div>
 

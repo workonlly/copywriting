@@ -82,7 +82,7 @@ export default function Page() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <p className="text-gray-600 mb-2">Loading job details...</p>
-          <p className="text-sm text-gray-400">ID: {id}</p>
+          
         </div>
       </div>
     );

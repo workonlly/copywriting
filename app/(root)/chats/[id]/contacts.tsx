@@ -1,127 +1,383 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
-import { v4 as uuidv4 } from 'uuid';
+import { useParams } from 'next/navigation';
+import io, { Socket } from 'socket.io-client';
+import { jwtDecode } from "jwt-decode"; // Make sure to npm install jwt-decode
 
-// Initialize connection to backend using environment variable
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_UR ;
-const socket = io(BACKEND_URL);
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
 
-export default function ChatWindow({ currentUserId, receiverId }: any) {
+export default function ChatWindow() {
+  const params = useParams();
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
+  
+  // State for IDs & Auth
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [receiverId, setReceiverId] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<string>("");
+  
+  // State for Recharge
+  const [isExpired, setIsExpired] = useState(false);
+  const [expiryDate, setExpiryDate] = useState<string | null>(null);
+
+  // Refs (Crucial for performance)
+  const socketRef = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // ----------------------------------------------------------------
+  // 1. INITIALIZATION (Run ONCE on mount)
+  // ----------------------------------------------------------------
   useEffect(() => {
-    const user=localStorage.getItem("chat_receiver_id");
-    const roomid = uuidv4();
-    // 1. Join my private channel to hear "doorbell" rings
-    socket.emit("join_room", roomid);
+    // A. Setup Socket (Singleton - prevents multiple connections)
+    if (!socketRef.current) {
+      socketRef.current = io(BACKEND_URL, {
+        transports: ['websocket'], // Force fast transport
+        autoConnect: false         // Wait until we have IDs
+      });
 
-    // 2. Listen for incoming messages
-    const handleMessage = (newMessage: any) => {
-      // Logic: Is this message for the chat I am looking at right now?
-      // (Either I sent it, or the person I'm looking at sent it)
-      if (newMessage.user_id === receiverId || newMessage.user_id === currentUserId) {
-        setMessages((prev) => [...prev, newMessage]);
+      // Socket connection event handlers
+      socketRef.current.on("connect", () => {
+        console.log("✅ Socket connected:", socketRef.current?.id);
+      });
+
+      socketRef.current.on("connect_error", (error) => {
+        console.error("❌ Socket connection error:", error.message);
+      });
+
+      socketRef.current.on("disconnect", (reason) => {
+        console.log("🔌 Socket disconnected:", reason);
+      });
+    }
+
+    // B. Get User Info from Token & Storage
+    const token = localStorage.getItem("token");
+    const storedReceiver = localStorage.getItem("chat_receiver_id");
+    
+    // Use URL param as fallback if localStorage is empty
+    const receiverIdFromUrl = params?.id as string;
+    const finalReceiverId = storedReceiver || receiverIdFromUrl;
+    
+    console.log("🔍 Initializing chat with receiver:", finalReceiverId, "(from:", storedReceiver ? "localStorage" : "URL", ")");
+    setReceiverId(finalReceiverId);
+
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        // Supports both 'id' and 'user_id' formats
+        const userId = decoded.user_id || decoded.id;
+        setCurrentUserId(userId);
+        console.log("Current User ID:", userId);
+      } catch (e) {
+        console.error("Invalid Token", e);
       }
-    };
+    }
 
-    socket.on("receive_message", handleMessage);
-    socket.on("message_sent", handleMessage);
-
+    // Cleanup when leaving page
     return () => {
-      socket.off("receive_message");
-      socket.off("message_sent");
+      socketRef.current?.disconnect();
+      socketRef.current = null;
     };
   }, []);
 
-  // Auto-scroll to bottom
+  // ----------------------------------------------------------------
+  // 2. FETCH HISTORY & CHECK RECHARGE STATUS
+  // ----------------------------------------------------------------
+  useEffect(() => {
+    if (!receiverId || !currentUserId) return;
+
+    console.log("📡 Fetching chat history for receiver:", receiverId);
+    
+    // Clear messages when switching users
+    setMessages([]);
+    setRoomId("");
+
+    const initChat = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        
+        // Fetch Conversation Logic
+        const res = await fetch(`${BACKEND_URL}/conversation/conversation/${receiverId}`, {
+          method: "GET",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` 
+          }
+        });
+        
+        if (!res.ok) {
+          console.error("Failed to fetch conversation:", res.status);
+          return;
+        }
+
+        const json = await res.json();
+        const data = Array.isArray(json) ? json : [];
+
+        console.log("💬 Loaded messages:", data.length);
+
+        // Filter out metadata-only records (where conversation is null)
+        const actualMessages = data.filter((msg: any) => msg.conversation !== null && msg.conversation !== undefined);
+        
+        console.log("💬 Actual messages with content:", actualMessages.length);
+
+        // A. Set Room ID
+        // If chat exists, use DB Room ID. If not, generate one (min_max).
+        let activeRoomId = "";
+        if (data.length > 0) {
+           activeRoomId = data[0].room_id;
+           
+           // B. CHECK RECHARGE EXPIRY (Logic applied here)
+           // Assuming the backend sends 'recharge_expires_at' in the first row
+           const expiresAt = data[0].recharge_expires_at; 
+           if (expiresAt) {
+             setExpiryDate(expiresAt);
+             if (new Date() > new Date(expiresAt)) {
+               setIsExpired(true);
+             }
+           }
+        } else {
+           activeRoomId = [currentUserId, parseInt(receiverId!)].sort((a, b) => a - b).join("_");
+        }
+
+        setRoomId(activeRoomId);
+        
+        // Sort messages by timestamp (oldest first)
+        const sortedMessages = actualMessages.sort((a: any, b: any) => {
+          const timeA = new Date(a.created_at).getTime();
+          const timeB = new Date(b.created_at).getTime();
+          return timeA - timeB;
+        });
+        
+        setMessages(sortedMessages);
+        console.log("🏠 Room ID set to:", activeRoomId);
+
+      } catch (err) {
+        console.error("Failed to load chat", err);
+      }
+    };
+
+    initChat();
+  }, [receiverId, currentUserId]);
+
+  // ----------------------------------------------------------------
+  // 3. SOCKET CONNECTION & LISTENER
+  // ----------------------------------------------------------------
+  useEffect(() => {
+    if (!roomId || !socketRef.current) return;
+
+    const socket = socketRef.current;
+
+    // Connect & Join specific room
+    if (!socket.connected) {
+      console.log("🔌 Connecting socket...");
+      socket.connect();
+    }
+    
+    console.log("🚪 Joining room:", roomId);
+    socket.emit("join_room", roomId);
+
+    // Error Listener (e.g., "Plan Expired" from server)
+    socket.on("error_message", (data) => {
+        alert(data.message);
+        setIsExpired(true);
+    });
+
+    // Message Listener
+    const handleReceive = (newMessage: any) => {
+        console.log("📨 Received message:", newMessage);
+        if (newMessage.room_id === roomId) {
+            // Add message only if it's not already in the list (prevent duplicates)
+            setMessages((prev) => {
+              const isDuplicate = prev.some(msg => 
+                msg.created_at === newMessage.created_at && 
+                msg.sender_id === newMessage.sender_id
+              );
+              
+              if (!isDuplicate) {
+                return [...prev, newMessage];
+              }
+              return prev;
+            });
+        }
+    };
+
+    socket.on("receive_message", handleReceive);
+
+    return () => {
+      socket.off("receive_message", handleReceive);
+      socket.off("error_message");
+    };
+  }, [roomId]);
+
+  // Auto-scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
 
-    // 3. Send via HTTP (The Fast Producer)
+  // ----------------------------------------------------------------
+  // 4. ACTIONS (Send & Recharge)
+  // ----------------------------------------------------------------
+  
+  const handleRecharge = async () => {
     try {
-        const token = localStorage.getItem("token"); // Get auth token
-        await fetch(`${BACKEND_URL}/chat/send`, {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${BACKEND_URL}/conversation/recharge`, {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ 
-                conversant_id: receiverId, 
-                message: input 
-            }),
+            body: JSON.stringify({ room_id: roomId })
         });
         
-        setInput(""); // Clear input immediately
+        const data = await res.json();
+        if (res.ok) {
+            alert("Recharge Successful! You can chat for 24 hours.");
+            setIsExpired(false);
+            setExpiryDate(data.data.recharge_expires_at); // Update frontend state
+        } else {
+            alert("Recharge failed");
+        }
     } catch (err) {
-        console.error("Failed to send", err);
+        console.error(err);
     }
   };
 
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || !roomId || !currentUserId) {
+      console.warn("⚠️ Cannot send: missing data", { input: !!input, roomId, currentUserId });
+      return;
+    }
+
+    // Double check expiry before sending
+    if (isExpired) {
+        alert("Your plan has expired. Please recharge.");
+        return;
+    }
+
+    const timestamp = new Date().toISOString();
+
+    const payload = {
+      room_id: roomId,
+      sender_id: currentUserId,
+      receiver_id: receiverId,
+      chat_recharge: !isExpired, // Pass status
+      conversation: { 
+        [timestamp]: {
+          message: input,
+          sender_id: currentUserId
+        }
+      },
+      created_at: timestamp
+    };
+
+    console.log("📤 Sending message:", payload);
+
+    // Optimistic Update
+    setMessages((prev) => [...prev, payload]);
+    setInput(""); 
+
+    // Send via Socket
+    socketRef.current?.emit("send_message", payload);
+  };
+
   return (
-    <div className="flex flex-col h-[500px] border-2 border-violet-200 rounded-2xl bg-gradient-to-b from-white to-violet-50/30 shadow-xl shadow-violet-500/10">
+    <div className="flex flex-col h-full border-2 border-violet-200 rounded-2xl shadow-xl overflow-hidden">
        {/* Chat Area */}
-       <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-violet-50/20 to-white">
-         {messages.map((msg, i) => {
-           const isMe = msg.user_id === currentUserId;
-           return (
-             <div key={i} className={`flex ${isMe ? "justify-end" : "justify-start"} animate-slideIn`}>
-               <div className={`p-4 rounded-2xl max-w-[70%] text-sm font-medium shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg ${
-                 isMe 
-                   ? "bg-gradient-to-br from-violet-500 to-violet-600 text-white rounded-br-sm" 
-                   : "bg-white border-2 border-violet-100 text-gray-800 rounded-bl-sm hover:border-violet-200"
-               }`}>
-                 {msg.conversation}
+       <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
+         {messages.length === 0 ? (
+           <div className="flex items-center justify-center h-full text-gray-400">
+             <p className="text-center">
+               No messages yet.<br />
+               <span className="text-sm">Start the conversation!</span>
+             </p>
+           </div>
+         ) : (
+           messages.map((msg, i) => {
+             // Debug: Log the message structure
+             if (i === 0) console.log("📩 Message structure:", JSON.stringify(msg, null, 2));
+             
+             let messageText = "Message Error";
+             let messageSenderId = msg.sender_id || msg.user_id;
+             
+             // Handle different conversation formats
+             if (typeof msg.conversation === 'string') {
+                 messageText = msg.conversation;
+             } else if (msg.conversation && typeof msg.conversation === 'object') {
+                 // If it's an object with timestamp keys
+                 const values = Object.values(msg.conversation);
+                 if (values.length > 0) {
+                   const firstValue = values[0];
+                   
+                   // Check if value is an object with message and sender_id (NEW FORMAT)
+                   if (typeof firstValue === 'object' && firstValue !== null && 'message' in firstValue) {
+                     messageText = (firstValue as any).message;
+                     messageSenderId = (firstValue as any).sender_id || messageSenderId;
+                   } else if (typeof firstValue === 'string') {
+                     // Old format: just text
+                     messageText = firstValue;
+                   }
+                 }
+             } else if (msg.message) {
+                 // Fallback: check if there's a 'message' field
+                 messageText = msg.message;
+             } else if (msg.text) {
+                 // Fallback: check if there's a 'text' field
+                 messageText = msg.text;
+             }
+             
+             // If still error, show what we have
+             if (messageText === "Message Error") {
+               console.error("❌ Cannot parse message:", JSON.stringify(msg, null, 2));
+             }
+
+             const isMe = messageSenderId === currentUserId;
+
+             return (
+               <div key={i} className={`flex ${isMe ? "justify-end" : "justify-start"} animate-slideIn`}>
+                 <div className={`p-3 rounded-2xl max-w-[70%] text-sm font-medium shadow-sm ${
+                   isMe 
+                     ? "bg-violet-600 text-white rounded-br-sm" 
+                     : "bg-gray-100 text-gray-800 rounded-bl-sm"
+                 }`}>
+                   {messageText}
+                 </div>
                </div>
-             </div>
-           );
-         })}
+             );
+           })
+         )}
          <div ref={messagesEndRef} />
        </div>
        
-       {/* Input Area */}
-       <form onSubmit={sendMessage} className="p-4 border-t-2 border-violet-100 bg-white rounded-b-2xl flex gap-3 items-center shadow-inner">
-         <input 
-           value={input} 
-           onChange={e => setInput(e.target.value)} 
-           className="flex-1 border-2 border-violet-200 rounded-full px-5 py-3 text-sm font-medium bg-gradient-to-r from-white to-violet-50/50 focus:outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-200/50 focus:shadow-lg transition-all duration-300 placeholder:text-gray-400"
-           placeholder="Type a message..."
-         />
-         <button 
-           type="submit"
-           className="bg-gradient-to-br from-violet-500 to-violet-600 text-white w-12 h-12 rounded-full font-bold hover:from-violet-600 hover:to-violet-700 hover:scale-110 hover:shadow-lg hover:shadow-violet-500/50 active:scale-95 transition-all duration-300 flex items-center justify-center"
-         >
-           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-           </svg>
-         </button>
-       </form>
-
-       {/* CSS Animations */}
-       <style jsx>{`
-         @keyframes slideIn {
-           from {
-             opacity: 0;
-             transform: translateY(10px);
-           }
-           to {
-             opacity: 1;
-             transform: translateY(0);
-           }
-         }
-
-         .animate-slideIn {
-           animation: slideIn 0.3s ease-out;
-         }
-       `}</style>
+       {/* Input Area or Recharge Button */}
+       <div className="p-4 border-t bg-white rounded-b-2xl">
+         {isExpired ? (
+            <div className="flex flex-col items-center gap-2 p-2 bg-red-50 rounded-lg">
+                <p className="text-red-600 font-semibold text-sm">Your chat session has expired.</p>
+                <button 
+                    onClick={handleRecharge}
+                    className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition"
+                >
+                    Recharge for 24 Hours
+                </button>
+            </div>
+         ) : (
+            <form onSubmit={sendMessage} className="flex gap-3">
+                <input 
+                    value={input} 
+                    onChange={e => setInput(e.target.value)} 
+                    className="flex-1 border rounded-full px-4 py-2 focus:outline-violet-500"
+                    placeholder="Type a message..."
+                />
+                <button type="submit" className="bg-violet-600 text-white p-3 rounded-full hover:bg-violet-700 transition">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </form>
+         )}
+       </div>
     </div>
   );
 }

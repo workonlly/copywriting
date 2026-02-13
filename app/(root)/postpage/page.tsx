@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import ExploreColleges from '../../colegesearch';
 
 const JobPostForm = () => {
   const router = useRouter();
@@ -109,11 +110,20 @@ const JobPostForm = () => {
         body: formData,
       });
 
+
       // Check for HTML error response
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || "Publishing failed");
+        const tokendeduction= await fetch(`${API_BASE}/payment/minusfive`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+        alert("Post published successfully! 5 tokens have been deducted from your account.");
         router.push("/");
       } else {
         const text = await response.text();
@@ -208,20 +218,14 @@ const JobPostForm = () => {
                 <option value="Assignment">Assignment</option>
                 <option value="Rental">Rental</option>
                 <option value="Notes">Notes</option>
-                <option value="Canteen">Canteen</option>
+                <option value="Canteen">Grocery</option>
               </select>
             </div>
 
             {/* Location */}
             <div>
               <label className="block text-xs font-black uppercase mb-1 text-gray-500">Location</label>
-              <input 
-                type="text" 
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="w-full border-2 border-black p-3 rounded-sm focus:outline-none focus:border-violet-500"
-                placeholder="Library, Hostel, etc."
-              />
+              <ExploreColleges location={location} setLocation={setLocation} />
             </div>
           </div>
 
@@ -267,7 +271,7 @@ const JobPostForm = () => {
 
           {/* Links */}
           <div>
-            <label className="block text-xs font-black uppercase mb-2 text-gray-500">External Links</label>
+            <label className="block text-xs font-black uppercase mb-2 text-gray-500"> External Link (Add Google Drive link of Assignment/Notes)</label>
             <div className="space-y-2">
               {links.map((link, index) => (
                 <div key={index} className="flex gap-2">

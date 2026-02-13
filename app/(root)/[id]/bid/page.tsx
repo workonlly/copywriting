@@ -46,6 +46,14 @@ function BidPage() {
         throw new Error(data.message || 'Failed to place bid');
       }
 
+      const tokenDeductionRes = await fetch(`${API_BASE}/payment/minusone`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
       setSuccess(true);
       setTimeout(() => {
         router.back();
@@ -61,7 +69,7 @@ function BidPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-violet-500 p-6">
         <div className="bg-white rounded-lg p-8 text-center max-w-md">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Bid Placed Successfully!</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Bid Placed Successfully! 1 token deducted</h2>
           <p className="text-gray-600 mb-4">Redirecting back to job details...</p>
         </div>
       </div>

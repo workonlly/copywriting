@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import GoogleAuthProvider from "@/components/GoogleAuthProvider";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -17,7 +18,10 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
              <div className="p-2 ">
                   <Image src="/logo-1.svg" alt="logo" width={180} height={80} className="p-1 object-contain  bg-gradient-to-r from-purple-400 to-purple-600 " />
                </div>
-             {children}
+             <GoogleAuthProvider>
+               {children}
+             
+             </GoogleAuthProvider>
             </section>
                 </div>
       </div>

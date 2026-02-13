@@ -4,11 +4,13 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link';
 import { getUser } from './lib/data';
+import ExploreColleges from './colegesearch';
 
 function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+  const [location, setLocation] = useState<string>("");
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -51,13 +53,9 @@ function Navbar() {
           <Link href="/">
             <Image src="/logo-2.svg" alt="logo" width={180} height={80} className="p-1 object-contain   " />
           </Link>
-          <div className="hidden lg:flex flex-row gap-2 items-center px-3 py-1.5 rounded-full bg-gray-50 text-gray-500 hover:text-violet-600 font-medium cursor-pointer transition-all border border-transparent hover:border-violet-100">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-            </svg>
-            <span className='text-xs'>Explore</span>
-          </div>
+         <div>
+          <ExploreColleges location={location} setLocation={setLocation}></ExploreColleges>
+         </div>
         </div>
 
         {/* Right Section */}
