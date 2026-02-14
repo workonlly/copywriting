@@ -10,7 +10,6 @@ function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState<any>(null);
-  const [location, setLocation] = useState<string>("");
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -54,7 +53,7 @@ function Navbar() {
             <Image src="/logo-2.svg" alt="logo" width={180} height={80} className="p-1 object-contain   " />
           </Link>
          <div>
-          <ExploreColleges location={location} setLocation={setLocation}></ExploreColleges>
+          <ExploreColleges />
          </div>
         </div>
 

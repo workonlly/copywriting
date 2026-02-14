@@ -2,9 +2,11 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ExploreColleges from '../../colegesearch';
+import { useCollege } from '@/components/CollegeContext';
 
 const JobPostForm = () => {
   const router = useRouter();
+  const { college } = useCollege();
   
   // UI State
   const [loading, setLoading] = useState(false);
@@ -15,7 +17,6 @@ const JobPostForm = () => {
   const [type, setType] = useState("Assignment");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [location, setLocation] = useState("");
   const [cost, setCost] = useState("");
   const [links, setLinks] = useState(['']);
   
@@ -84,7 +85,7 @@ const JobPostForm = () => {
     formData.append("type", type);
     formData.append("description", description);
     formData.append("deadline", deadline);
-    formData.append("location", location);
+    formData.append("location", college?.college || "");
     formData.append("cost", cost);
 
     // Append Links
@@ -225,7 +226,8 @@ const JobPostForm = () => {
             {/* Location */}
             <div>
               <label className="block text-xs font-black uppercase mb-1 text-gray-500">Location</label>
-              <ExploreColleges location={location} setLocation={setLocation} />
+              <ExploreColleges />
+              <p className="text-xs text-gray-500 mt-1">Selected: {college?.college || 'No college selected'}</p>
             </div>
           </div>
 
