@@ -25,11 +25,20 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: '/:path*',
+        source: '/login',
         headers: [
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
+            value: 'unsafe-none',
+          },
+        ],
+      },
+      {
+        source: '/signup',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'unsafe-none',
           },
         ],
       },

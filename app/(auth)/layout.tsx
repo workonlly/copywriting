@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Header Copy - Focused on Value/Outcome */}
       <div className="relative z-10  h-full w-full flex flex-col justify-center items-start ">
-         <img src="/introGraphics.svg" alt="" />
+         <img src="/IntroGraphics.svg" alt="" />
       </div>
     </section>
             <section className=' rounded-sm h-full w-full  p-2 flex flex-col'> 
