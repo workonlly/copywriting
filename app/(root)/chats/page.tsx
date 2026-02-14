@@ -1,7 +1,7 @@
 import React from 'react'
 import ChatInterface from './[id]/contacts'
 
-function page() {
+function ChatsPage() {
   return (
     <div className='relative h-full'>
       <ChatInterface></ChatInterface>
@@ -9,4 +9,4 @@ function page() {
   )
 }
 
-export default page
+export default ChatsPage

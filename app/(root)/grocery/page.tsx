@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useCollege } from '@/components/CollegeContext';
 
 const API_BASE: any = process.env.NEXT_PUBLIC_API_BASE_URL;
-function page() {
+function GroceryPage() {
  const [posts,setposts]=useState<any>(null);
  const [loading,setloading]=useState(true);
  const { college } = useCollege();
@@ -58,4 +58,4 @@ function page() {
   )
 }
 
-export default page
+export default GroceryPage
