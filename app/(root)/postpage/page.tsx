@@ -249,6 +249,7 @@ const JobPostForm = () => {
               <label className="block text-xs font-black uppercase mb-1 text-gray-500">Cost (₹)</label>
               <input 
                 type="number" 
+                min="0"
                 value={cost}
                 onChange={(e) => setCost(e.target.value)}
                 className="w-full border-2 border-black p-3 rounded-sm font-bold"
