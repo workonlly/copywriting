@@ -11,7 +11,7 @@ function LoginPage() {
       <div className="w-full h-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8">
         <div className="w-full max-w-md space-y-6">
           {/* Heading */}
-          <div className="text-center">
+          <div className="text-center m-1">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
               Welcome{' '}
               <span className="bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 text-white px-2 py-1 rounded">

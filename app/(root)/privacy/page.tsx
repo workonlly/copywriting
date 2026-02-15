@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
 
       <Section title="8. Children's Privacy">
         <p>
-          CopywritingWork is for college students 18+ only. We do not knowingly collect data from minors under 18.
+          CopywritingWork is for college students 16+ only. 
         </p>
       </Section>
 

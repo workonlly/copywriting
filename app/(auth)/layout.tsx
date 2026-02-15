@@ -7,8 +7,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 		    <div className='bg-white min-h-screen w-screen flex justify-center items-center flex-col relative p-4 sm:p-6'>
                 <div className='w-full sm:w-[90%] md:w-[85%] lg:w-[80%] h-auto sm:h-[85%] md:h-[80%] rounded-lg sm:rounded-xl shadow-2xl flex justify-center items-end relative z-10 bg-white'>
                     <div className='flex flex-col md:flex-row p-1 sm:p-2 relative h-full w-full'>
-           {/* Intro Graphics Section - Hidden on small mobile, visible on larger screens */}
-           <section className="hidden sm:flex relative rounded-xl md:rounded-2xl h-48 sm:h-64 md:h-full w-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 flex-col justify-center items-center overflow-hidden shadow-2xl">
+           {/* Intro Graphics Section - Visible on all screen sizes */}
+           <section className="flex relative rounded-xl md:rounded-2xl h-48 sm:h-64 md:h-full w-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 flex-col justify-center items-center overflow-hidden shadow-2xl">
       {/* Header Copy - Focused on Value/Outcome */}
       <div className="relative z-10 h-full w-full flex flex-col justify-center items-center p-4">
          <img src="/IntroGraphics.svg" alt="Welcome" className="w-full h-full object-contain" />
@@ -22,7 +22,6 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                </div>
              <GoogleAuthProvider>
                {children}
-             
              </GoogleAuthProvider>
             </section>
                 </div>
