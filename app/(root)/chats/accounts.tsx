@@ -140,12 +140,12 @@ function Accounts() {
               opacity: isLoading ? 0.6 : 1,
               pointerEvents: loadingUserId !== null ? "none" : "auto"
             }}
-            className="group flex flex-row gap-4 items-center p-5 hover:bg-violet-50/60 cursor-pointer border-b border-gray-100 transition-all duration-300"
+            className="group flex flex-row gap-2 sm:gap-3 md:gap-4 items-center p-2 sm:p-3 md:p-5 hover:bg-violet-50/60 cursor-pointer border-b border-gray-100 transition-all duration-300"
           >
             {/* Avatar Click: Goes to Profile Review */}
             <div onClick={(e) => e.stopPropagation()}>
               <Link href={`/chats/${user.id}/review`}>
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white font-bold text-lg shrink-0 overflow-hidden relative hover:scale-110 hover:shadow-lg hover:shadow-violet-500/50 hover:ring-4 hover:ring-violet-300 transition-all duration-300">
+                <div className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white font-bold text-sm sm:text-base md:text-lg shrink-0 overflow-hidden relative hover:scale-110 hover:shadow-lg hover:shadow-violet-500/50 hover:ring-2 md:hover:ring-4 hover:ring-violet-300 transition-all duration-300">
                   {user.image ? (
                     <img 
                       src={user.image} 
@@ -153,7 +153,7 @@ function Accounts() {
                       className="w-full h-full object-cover" 
                     />
                   ) : (
-                    <span className="font-black text-xl">
+                    <span className="font-black text-sm sm:text-lg md:text-xl">
                       {user.name ? user.name.charAt(0).toUpperCase() : "?"}
                     </span>
                   )}
@@ -163,25 +163,25 @@ function Accounts() {
 
             {/* NAME SECTION */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-base text-gray-900 truncate group-hover:text-violet-700 transition-colors duration-300">
+              <h3 className="font-bold text-xs sm:text-sm md:text-base text-gray-900 truncate group-hover:text-violet-700 transition-colors duration-300">
                 {user.name}
               </h3>
-              <p className="text-sm text-gray-500 truncate">{user.email}</p>
+              <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 truncate">{user.email}</p>
             </div>
 
             {/* Loading indicator - only for this specific user */}
             {isLoading && (
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-violet-600"></div>
+              <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-violet-600"></div>
             )}
           </div>
         );
       })}
 
       {userData.length === 0 && (
-        <div className="p-8 text-center">
-          <p className="text-gray-400 text-base font-medium">
+        <div className="p-4 sm:p-6 md:p-8 text-center">
+          <p className="text-gray-400 text-xs sm:text-sm md:text-base font-medium">
             No contacts yet.<br/>
-            <span className="text-sm">Start chatting with someone to add them to your contacts!</span>
+            <span className="text-[10px] sm:text-xs md:text-sm">Start chatting with someone to add them to your contacts!</span>
           </p>
         </div>
       )}

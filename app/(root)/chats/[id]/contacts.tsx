@@ -283,14 +283,14 @@ export default function ChatWindow() {
   };
 
   return (
-    <div className="flex flex-col h-full border-2 border-violet-200 rounded-2xl shadow-xl overflow-hidden">
+    <div className="flex flex-col h-full border border-violet-200 sm:border-2 rounded-lg sm:rounded-2xl shadow-xl overflow-hidden">
        {/* Chat Area */}
-       <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
+       <div className="flex-1 overflow-y-auto p-2 sm:p-4 md:p-6 space-y-2 sm:space-y-3 md:space-y-4 bg-white">
          {messages.length === 0 ? (
            <div className="flex items-center justify-center h-full text-gray-400">
-             <p className="text-center">
+             <p className="text-center text-xs sm:text-sm md:text-base">
                No messages yet.<br />
-               <span className="text-sm">Start the conversation!</span>
+               <span className="text-[10px] sm:text-xs md:text-sm">Start the conversation!</span>
              </p>
            </div>
          ) : (
@@ -336,7 +336,7 @@ export default function ChatWindow() {
 
              return (
                <div key={i} className={`flex ${isMe ? "justify-end" : "justify-start"} animate-slideIn`}>
-                 <div className={`p-3 rounded-2xl max-w-[70%] text-sm font-medium shadow-sm ${
+                 <div className={`p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl max-w-[85%] sm:max-w-[75%] md:max-w-[70%] text-xs sm:text-sm font-medium shadow-sm ${
                    isMe 
                      ? "bg-violet-600 text-white rounded-br-sm" 
                      : "bg-gray-100 text-gray-800 rounded-bl-sm"
@@ -351,27 +351,27 @@ export default function ChatWindow() {
        </div>
        
        {/* Input Area or Recharge Button */}
-       <div className="p-4 border-t bg-white rounded-b-2xl">
+       <div className="p-2 sm:p-3 md:p-4 border-t bg-white rounded-b-lg sm:rounded-b-2xl">
          {isExpired ? (
             <div className="flex flex-col items-center gap-2 p-2 bg-red-50 rounded-lg">
-                <p className="text-red-600 font-semibold text-sm">Your chat session has expired.</p>
+                <p className="text-red-600 font-semibold text-xs sm:text-sm">Your chat session has expired.</p>
                 <button 
                     onClick={handleRecharge}
-                    className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition"
+                    className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-1.5 sm:py-2 px-3 sm:px-4 rounded-full transition text-xs sm:text-sm"
                 >
                     Recharge for 24 Hours
                 </button>
             </div>
          ) : (
-            <form onSubmit={sendMessage} className="flex gap-3">
+            <form onSubmit={sendMessage} className="flex gap-2 sm:gap-3">
                 <input 
                     value={input} 
                     onChange={e => setInput(e.target.value)} 
-                    className="flex-1 border rounded-full px-4 py-2 focus:outline-violet-500"
+                    className="flex-1 border rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-violet-500"
                     placeholder="Type a message..."
                 />
-                <button type="submit" className="bg-violet-600 text-white p-3 rounded-full hover:bg-violet-700 transition">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button type="submit" className="bg-violet-600 text-white p-2 sm:p-2.5 md:p-3 rounded-full hover:bg-violet-700 transition shrink-0">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
                 </button>
