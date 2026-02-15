@@ -33,7 +33,7 @@ export default function RootLayout({
             <Link href="/" className="block px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors text-center">Assignment</Link>
           </li>
           <li>
-            <Link href="/rental" className="block px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors text-center">Rental</Link>
+            <Link href="/rent" className="block px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors text-center">Rental</Link>
           </li>
           <li>
             <Link href="/notes" className="block px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors text-center">Notes</Link>

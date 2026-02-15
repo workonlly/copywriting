@@ -4,7 +4,7 @@ import React from 'react'
 import JobCard from '../card'
 import { useEffect,useState } from 'react'
 import Link from 'next/link';
-import { useCollege } from '../../../components/CollegeContext';
+import { useCollege } from '@/components/CollegeContext';
 
 const API_BASE: any = process.env.NEXT_PUBLIC_API_BASE_URL;
 
