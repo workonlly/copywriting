@@ -47,12 +47,12 @@ function Navbar() {
   return (
     <>
       <div className='flex flex-row justify-between items-center mx-5 py-3 border-b border-gray-50 bg-white sticky top-0 z-50'>
-        {/* Left: Logo & Explore */}
+        {/* Left: Logo */}
         <div className='flex flex-row items-center gap-4'>
           <Link href="/">
             <Image src="/logo-2.svg" alt="logo" width={180} height={80} className="p-1 object-contain   " />
           </Link>
-         <div>
+         <div className="hidden lg:block">
           <ExploreColleges />
          </div>
         </div>
@@ -82,7 +82,7 @@ function Navbar() {
               </Link>
 
               {/* Full Profile Link with Name */}
-              <Link href="/profile" className="flex items-center gap-2 ml-2 group p-1 pr-3 rounded-full hover:bg-gray-50 transition-all">
+              <a href="/profile" className="flex items-center gap-2 ml-2 group p-1 pr-3 rounded-full hover:bg-gray-50 transition-all">
                {userData?.image_url ? (
                     <img 
                       src={userData.image_url} 
@@ -97,15 +97,23 @@ function Navbar() {
                     {userData.name}
                   </span>
                 )}
-              </Link>
+              </a>
             </div>
           </div>
 
           {/* Mobile Profile & Burger Combo */}
           <div className="flex md:hidden items-center gap-2 bg-gray-50 p-1 rounded-full border border-gray-100">
-            <Link href="/profile">
-              <ProfileBubble />
-            </Link>
+            <a href="/profile">
+              {userData?.image_url ? (
+                    <img 
+                      src={userData.image_url} 
+                      alt="Profile Picture" 
+                      className="w-9 h-9 rounded-full object-cover" 
+                    />
+                  ) : (
+                    <ProfileBubble />
+                  )}
+            </a>
             <button
               onClick={toggleMenu}
               className="p-1.5 rounded-full text-gray-600 hover:bg-white hover:shadow-sm transition-all"
@@ -124,6 +132,11 @@ function Navbar() {
         </div>
       </div>
 
+      {/* Explore Colleges Row - Mobile Only */}
+      <div className="lg:hidden w-full bg-white border-b border-gray-100 px-3 py-2">
+        <ExploreColleges />
+      </div>
+
       {/* Mobile Dropdown Menu */}
       {isOpen && (
         <div className="md:hidden absolute w-full bg-white border-b border-gray-200 shadow-xl z-50 animate-in fade-in slide-in-from-top-2">
@@ -131,13 +144,6 @@ function Navbar() {
             <Link href="/postpage" className="p-3 bg-violet-600 text-white rounded-xl text-center font-bold text-sm shadow-md" onClick={() => setIsOpen(false)}>
               Post a New Job
             </Link>
-            <div className="flex flex-row gap-2 items-center px-3 py-1.5 rounded-full bg-gray-50 text-gray-500 hover:text-violet-600 font-medium cursor-pointer transition-all border border-transparent hover:border-violet-100">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-            </svg>
-            <span className='text-xs'>Explore</span>
-          </div>
             <Link href="/chats" className="p-3 text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-3 font-medium" onClick={() => setIsOpen(false)}>
                Messages
             </Link>

@@ -5,7 +5,7 @@ import JobCardi from './card';
 
 function Posts() {
     const API_BASE: any = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const[posts,setposts]=useState<any>(null);
+    const[posts,setposts]=useState<any>([]);
     const[loading,setloading]=useState(true);
     useEffect(()=>{
       const jobs=async()=>{
@@ -13,11 +13,11 @@ function Posts() {
             const id=id1?.id;
         const data =await fetch(`${API_BASE}/calls/${id}`);
         const json = await data.json();
-        setposts(json);
+        setposts(Array.isArray(json) ? json : []);
         setloading(false);
       };
       jobs();
-    });
+    }, []);
   return (
         <div className="p-2">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

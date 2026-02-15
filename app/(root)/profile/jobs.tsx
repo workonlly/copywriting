@@ -17,7 +17,7 @@ function Jobs() {
         setloading(false);
       };
       jobs();
-    });
+    }, []);
   return (
         <div className="p-2">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

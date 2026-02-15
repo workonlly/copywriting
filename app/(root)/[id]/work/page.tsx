@@ -106,34 +106,37 @@ export default function Page() {
 
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-2 sm:p-4 md:p-6">
       <div className="max-w-full mx-1">
 
 
         <div className="bg-white rounded-lg shadow-lg border border-violet-300 overflow-hidden">
           
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex gap-2 mb-3">
-              <span className="font-bold text-xl">TYPE : </span>
-              <span className="bg-violet-500 text-xl text-white  px-2  rounded">
+          <div className="p-3 sm:p-4 md:p-6 border-b border-gray-200">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3 text-xs sm:text-sm md:text-base">
+              <span className="font-bold">TYPE:</span>
+              <span className="bg-violet-500 text-white px-1.5 sm:px-2 py-0.5 rounded">
                 {job.type}
               </span>
-              <span className="font-bold text-xl">STATUS : </span> 
-              <span className=" text-white  text-xl bg-violet-500 px-2  rounded">
+              <span className="font-bold">STATUS:</span> 
+              <span className="text-white bg-violet-500 px-1.5 sm:px-2 py-0.5 rounded">
                  {job.progress}
               </span>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
               {job.headline}
             </h1>
             
-            <p className="text-2xl font-semibold text-black"><span className='text-gray-700 font-bold'>DESIRED COST </span> <span className=' text-xl bg-black text-white rounded-sm p-1'>₹{job.cost}</span></p>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-black">
+              <span className='text-gray-700 font-bold'>DESIRED COST </span> 
+              <span className='text-sm sm:text-base md:text-lg bg-black text-white rounded-sm p-1'>₹{job.cost}</span>
+            </p>
           </div>
 
           {job.image_url && job.image_url.length > 0 && (
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-3 sm:p-4 md:p-6 border-b border-gray-200">
               {job.image_url.length >0 && (
-                <div className="grid grid-cols-4 gap-2 mt-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2 mt-2">
                   {job.image_url.map((img, i) => (
                     <img 
                       key={i} 
@@ -147,40 +150,40 @@ export default function Page() {
             </div>
           )}
 
-          <div className="p-6 space-y-6">
+          <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
             
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1.5 sm:mb-2">Description</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {job.description || "No description provided."}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {job.type =="Canteen"?"":
               <div>
-                <p className="text-sm text-gray-500 mb-1">Deadline</p>
-                <p className="font-medium text-gray-900">{formattedDate}</p>
+                <p className="text-xs sm:text-sm text-gray-500 mb-1">Deadline</p>
+                <p className="text-sm sm:text-base font-medium text-gray-900">{formattedDate}</p>
               </div>
               }
               
               <div>
-                <p className="text-sm text-gray-500 mb-1">Location</p>
-                <p className="font-medium text-gray-900">{job.location || "Remote"}</p>
+                <p className="text-xs sm:text-sm text-gray-500 mb-1">Location</p>
+                <p className="text-sm sm:text-base font-medium text-gray-900">{job.location || "Remote"}</p>
               </div>
             </div>
 
             {job.links && job.links.length > 0  && (
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-2">Links</h3>
-                <ul className="space-y-2">
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1.5 sm:mb-2">Links</h3>
+                <ul className="space-y-1.5 sm:space-y-2">
                   {job.links.map((link, i) => (
                     <li key={i}>
                       <a 
                         href={link} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="text-blue-600 hover:underline text-sm break-all"
+                        className="text-blue-600 hover:underline text-xs sm:text-sm break-all"
                       >
                         {link}
                       </a>
@@ -190,21 +193,21 @@ export default function Page() {
               </div>
             )}
 
-            <div className="pt-4">
+            <div className="pt-3 sm:pt-4">
               <div className="flex justify-center w-full">
                 {job.progress == "initiated"?
                 <Link href='bid'
-                  className="w-full max-w-xs text-center bg-violet-500 text-white py-3 rounded-lg hover:bg-black hover:text-white  transition-colors font-medium">
+                  className="w-full max-w-xs text-center text-sm sm:text-base bg-violet-500 text-white py-2.5 sm:py-3 rounded-lg hover:bg-black hover:text-white transition-colors font-medium">
                   Place a Bid
                 </Link>
                 :
-                <div className="w-full max-w-xs text-center bg-violet-500 text-white py-3 rounded-lg hover:bg-black hover:text-white opacity-50 transition-colors font-medium cursor-not-allowed">
+                <div className="w-full max-w-xs text-center text-sm sm:text-base bg-violet-500 text-white py-2.5 sm:py-3 rounded-lg hover:bg-black hover:text-white opacity-50 transition-colors font-medium cursor-not-allowed">
                 Bidding Closed
                 </div>
                 }
                 
               </div>
-              <p className="text-center text-xs text-gray-500 mt-3">
+              <p className="text-center text-xs sm:text-sm text-gray-500 mt-2 sm:mt-3">
                 Posted on {new Date(job.created_at).toLocaleDateString()}
               </p>
             </div>  
