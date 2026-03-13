@@ -283,7 +283,7 @@ export default function ChatWindow() {
   };
 
   return (
-    <div className="flex flex-col h-full border border-violet-200 sm:border-2 rounded-lg sm:rounded-2xl shadow-xl overflow-hidden">
+    <div className="flex flex-col h-full border border-violet-200 sm:border-2  shadow-xl overflow-hidden">
        {/* Chat Area */}
        <div className="flex-1 overflow-y-auto p-2 sm:p-4 md:p-6 space-y-2 sm:space-y-3 md:space-y-4 bg-white">
          {messages.length === 0 ? (

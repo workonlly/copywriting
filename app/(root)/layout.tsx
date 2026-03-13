@@ -47,6 +47,9 @@ export default function RootLayout({
           <li>
             <Link href="/terms" className="block px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors text-center">Terms&Condition</Link>
           </li>
+          <li>
+            <Link href="/cancel" className="block px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-violet-500 hover:text-white transition-colors text-center">Cancelation-policy</Link>
+          </li>
         </ul>
       </nav>
       <div className="p-2">
